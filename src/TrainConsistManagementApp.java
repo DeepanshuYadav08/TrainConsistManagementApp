@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class TrainConsistManagementAppgit add . {
+public class TrainConsistManagementApp{
 
     public static void main(String[] args) {
 
