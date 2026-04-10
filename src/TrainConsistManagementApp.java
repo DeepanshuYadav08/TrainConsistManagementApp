@@ -1,42 +1,60 @@
-public class TrainConsistManagementApp {
+public class TrainConsistManangementApp {
+
+    // --- CUSTOM RUNTIME EXCEPTION ---
+    static class CargoSafetyException extends RuntimeException {
+        public CargoSafetyException(String message) {
+            super(message);
+        }
+    }
+
+    // --- Goods Bogie Model ---
+    static class GoodsBogie {
+        String shape;
+        String cargo;
+
+        GoodsBogie(String shape) {
+            this.shape = shape;
+        }
+
+        // Assign cargo with safety validation
+        void assignCargo(String cargo) {
+            try {
+                // Rule: Rectangular bogie cannot carry Petroleum
+                if (shape.equalsIgnoreCase("Rectangular") && cargo.equalsIgnoreCase("Petroleum")) {
+                    throw new CargoSafetyException("Unsafe cargo assignment!");
+                }
+
+                // If safe, assign cargo
+                this.cargo = cargo;
+                System.out.println("Cargo assigned successfully -> " + cargo);
+
+            } catch (CargoSafetyException e) {
+                System.out.println("Error: " + e.getMessage());
+
+            } finally {
+                System.out.println("Cargo validation completed for " + shape + " bogie");
+            }
+        }
+    }
 
     public static void main(String[] args) {
 
         System.out.println("=================================");
-        System.out.println("UC18 - Linear Search for Bogie ID");
+        System.out.println("UC15 - Safe Cargo Assignment");
         System.out.println("=================================\n");
 
-        // Create array of bogie IDs
-        String[] bogieIds = {"BG101", "BG205", "BG309", "BG412", "BG550"};
-
-        // Bogie ID to search
-        String searchId = "BG309";
-
-        // Display all bogies
-        System.out.println("Available Bogie IDs:");
-        for (String id : bogieIds) {
-            System.out.println(id);
-        }
+        // Safe case
+        GoodsBogie cylindrical = new GoodsBogie("Cylindrical");
+        cylindrical.assignCargo("Petroleum");
 
         System.out.println();
 
-        // ----- LINEAR SEARCH LOGIC -----
-        boolean found = false;
+        // Unsafe case
+        GoodsBogie rectangular = new GoodsBogie("Rectangular");
+        rectangular.assignCargo("Petroleum");
 
-        for (String id : bogieIds) {
-            if (id.equals(searchId)) {
-                found = true;
-                break; // stop when found
-            }
-        }
+        System.out.println();
 
-        // Display result
-        if (found) {
-            System.out.println("Bogie " + searchId + " found in train consist.");
-        } else {
-            System.out.println("Bogie " + searchId + " not found.");
-        }
-
-        System.out.println("\nUC18 search completed...");
+        System.out.println("UC15 runtime handling completed...");
     }
 }
