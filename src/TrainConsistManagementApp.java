@@ -1,51 +1,44 @@
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class TrainConsistManagementApp {
 
-    // Bogie model
-    public static class Bogie {
-        String name;
-        int capacity;
-
-        public Bogie(String name, int capacity) {
-            this.name = name;
-            this.capacity = capacity;
-        }
-
-        @Override
-        public String toString() {
-            return name + " | Capacity: " + capacity;
-        }
+    // Validation methods (IMPORTANT for test cases)
+    public static boolean isValidTrainId(String trainId) {
+        // Format: TRN-1234
+        return Pattern.matches("TRN-\\d{4}", trainId);
     }
 
-    // Filter method using Stream API
-    public static List<Bogie> filterBogiesByCapacity(List<Bogie> bogies, int threshold) {
-        return bogies.stream()
-                .filter(b -> b.capacity > threshold)
-                .collect(Collectors.toList());
+    public static boolean isValidCargoCode(String cargoCode) {
+        // Format: PET-AB
+        return Pattern.matches("[A-Z]{3}-[A-Z]{2}", cargoCode);
     }
 
     public static void main(String[] args) {
 
-        System.out.println("===============================================");
-        System.out.println("UC8 - Filter Passenger Bogies Using Streams");
-        System.out.println("===============================================\n");
+        Scanner scanner = new Scanner(System.in);
 
-        // Create bogie list
-        List<Bogie> bogies = new ArrayList<>();
-        bogies.add(new Bogie("Sleeper", 72));
-        bogies.add(new Bogie("AC Chair", 60));
-        bogies.add(new Bogie("First Class", 40));
-        bogies.add(new Bogie("General", 90));
+        System.out.println("===========================================");
+        System.out.println(" UC11 - Validate Train ID and Cargo Code ");
+        System.out.println("===========================================\n");
 
-        int threshold = 60;
+        // Input
+        System.out.print("Enter Train ID (Format: TRN-1234): ");
+        String trainId = scanner.nextLine();
 
-        // Apply filtering
-        List<Bogie> filteredBogies = filterBogiesByCapacity(bogies, threshold);
+        System.out.print("Enter Cargo Code (Format: PET-AB): ");
+        String cargoCode = scanner.nextLine();
 
-        // Display result
-        System.out.println("Filtered Bogies (Capacity > " + threshold + "):");
-        filteredBogies.forEach(System.out::println);
+        // Validation
+        boolean trainValid = isValidTrainId(trainId);
+        boolean cargoValid = isValidCargoCode(cargoCode);
+
+        // Output
+        System.out.println("\nValidation Results:");
+        System.out.println("Train ID Valid: " + trainValid);
+        System.out.println("Cargo Code Valid: " + cargoValid);
+
+        System.out.println("\nUC11 validation completed...");
     }
 }
+//TrainConsistManagementApp
