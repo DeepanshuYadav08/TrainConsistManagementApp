@@ -1,51 +1,60 @@
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
 public class TrainConsistManagementApp {
 
     // Bogie model
-    public static class Bogie {
-        String name;
+    static class Bogie {
+        String type;
         int capacity;
 
-        public Bogie(String name, int capacity) {
-            this.name = name;
+        Bogie(String type, int capacity) {
+            this.type = type;
             this.capacity = capacity;
         }
-
-        @Override
-        public String toString() {
-            return name + " | Capacity: " + capacity;
-        }
-    }
-
-    // Filter method using Stream API
-    public static List<Bogie> filterBogiesByCapacity(List<Bogie> bogies, int threshold) {
-        return bogies.stream()
-                .filter(b -> b.capacity > threshold)
-                .collect(Collectors.toList());
     }
 
     public static void main(String[] args) {
 
-        System.out.println("===============================================");
-        System.out.println("UC8 - Filter Passenger Bogies Using Streams");
-        System.out.println("===============================================\n");
+        System.out.println("===========================================");
+        System.out.println(" UC13 - Performance Comparison (Loops vs Streams) ");
+        System.out.println("===========================================\n");
 
-        // Create bogie list
+        // Create large dataset
         List<Bogie> bogies = new ArrayList<>();
-        bogies.add(new Bogie("Sleeper", 72));
-        bogies.add(new Bogie("AC Chair", 60));
-        bogies.add(new Bogie("First Class", 40));
-        bogies.add(new Bogie("General", 90));
 
-        int threshold = 60;
+        for (int i = 0; i < 100000; i++) {
+            bogies.add(new Bogie("Sleeper", i % 100));
+        }
 
-        // Apply filtering
-        List<Bogie> filteredBogies = filterBogiesByCapacity(bogies, threshold);
+        // -------- LOOP APPROACH --------
+        long startLoop = System.nanoTime();
 
-        // Display result
-        System.out.println("Filtered Bogies (Capacity > " + threshold + "):");
-        filteredBogies.forEach(System.out::println);
+        List<Bogie> loopResult = new ArrayList<>();
+        for (Bogie b : bogies) {
+            if (b.capacity > 50) {
+                loopResult.add(b);
+            }
+        }
+
+        long endLoop = System.nanoTime();
+        long loopTime = endLoop - startLoop;
+
+        // -------- STREAM APPROACH --------
+        long startStream = System.nanoTime();
+
+        List<Bogie> streamResult = bogies.stream()
+                .filter(b -> b.capacity > 50)
+                .collect(Collectors.toList());
+
+        long endStream = System.nanoTime();
+        long streamTime = endStream - startStream;
+
+        // Output results
+        System.out.println("Loop Execution Time (ns): " + loopTime);
+        System.out.println("Stream Execution Time (ns): " + streamTime);
+
+        System.out.println("\nUC13 performance benchmarking completed...");
     }
 }
+//TrainConsistManagementApp
