@@ -1,51 +1,45 @@
-import java.util.*;
-import java.util.stream.Collectors;
-
 public class TrainConsistManagementApp {
 
-    // Bogie model
-    public static class Bogie {
-        String name;
-        int capacity;
-
-        public Bogie(String name, int capacity) {
-            this.name = name;
-            this.capacity = capacity;
-        }
-
-        @Override
-        public String toString() {
-            return name + " | Capacity: " + capacity;
+    // -------- CUSTOM EXCEPTION --------
+    static class InvalidCapacityException extends Exception {
+        public InvalidCapacityException(String message) {
+            super(message);
         }
     }
 
-    // Filter method using Stream API
-    public static List<Bogie> filterBogiesByCapacity(List<Bogie> bogies, int threshold) {
-        return bogies.stream()
-                .filter(b -> b.capacity > threshold)
-                .collect(Collectors.toList());
+    // Passenger Bogie model with validation
+    static class PassengerBogie {
+        String name;
+        int capacity;
+
+        PassengerBogie(String name, int capacity) throws InvalidCapacityException {
+            if (capacity <= 0) {
+                throw new InvalidCapacityException("Capacity must be greater than zero");
+            }
+            this.name = name;
+            this.capacity = capacity;
+        }
     }
 
     public static void main(String[] args) {
 
-        System.out.println("===============================================");
-        System.out.println("UC8 - Filter Passenger Bogies Using Streams");
-        System.out.println("===============================================\n");
+        System.out.println("===========================================");
+        System.out.println(" UC14 - Handle Invalid Bogie Capacity ");
+        System.out.println("===========================================\n");
 
-        // Create bogie list
-        List<Bogie> bogies = new ArrayList<>();
-        bogies.add(new Bogie("Sleeper", 72));
-        bogies.add(new Bogie("AC Chair", 60));
-        bogies.add(new Bogie("First Class", 40));
-        bogies.add(new Bogie("General", 90));
+        try {
+            // Valid bogie
+            PassengerBogie b1 = new PassengerBogie("Sleeper", 72);
+            System.out.println("Created Bogie: " + b1.name + " -> " + b1.capacity);
 
-        int threshold = 60;
+            // Invalid bogie
+            PassengerBogie b2 = new PassengerBogie("AC Chair", 0);
 
-        // Apply filtering
-        List<Bogie> filteredBogies = filterBogiesByCapacity(bogies, threshold);
+        } catch (InvalidCapacityException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
 
-        // Display result
-        System.out.println("Filtered Bogies (Capacity > " + threshold + "):");
-        filteredBogies.forEach(System.out::println);
+        System.out.println("\nUC14 exception handling completed...");
     }
 }
+//TrainConsistManagementApp
