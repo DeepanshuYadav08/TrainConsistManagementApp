@@ -1,60 +1,57 @@
-public class TrainConsistManangementApp {
+import java.util.Arrays;
 
-    // --- CUSTOM RUNTIME EXCEPTION ---
-    static class CargoSafetyException extends RuntimeException {
-        public CargoSafetyException(String message) {
-            super(message);
-        }
-    }
-
-    // --- Goods Bogie Model ---
-    static class GoodsBogie {
-        String shape;
-        String cargo;
-
-        GoodsBogie(String shape) {
-            this.shape = shape;
-        }
-
-        // Assign cargo with safety validation
-        void assignCargo(String cargo) {
-            try {
-                // Rule: Rectangular bogie cannot carry Petroleum
-                if (shape.equalsIgnoreCase("Rectangular") && cargo.equalsIgnoreCase("Petroleum")) {
-                    throw new CargoSafetyException("Unsafe cargo assignment!");
-                }
-
-                // If safe, assign cargo
-                this.cargo = cargo;
-                System.out.println("Cargo assigned successfully -> " + cargo);
-
-            } catch (CargoSafetyException e) {
-                System.out.println("Error: " + e.getMessage());
-
-            } finally {
-                System.out.println("Cargo validation completed for " + shape + " bogie");
-            }
-        }
-    }
+public class TrainConsistManagementApp {
 
     public static void main(String[] args) {
 
         System.out.println("=================================");
-        System.out.println("UC15 - Safe Cargo Assignment");
+        System.out.println("UC19 - Binary Search for Bogie ID");
         System.out.println("=================================\n");
 
-        // Safe case
-        GoodsBogie cylindrical = new GoodsBogie("Cylindrical");
-        cylindrical.assignCargo("Petroleum");
+        // Create sorted array of bogie IDs
+        String[] bogieIds = {"BG101", "BG205", "BG309", "BG412", "BG550"};
+
+        // Ensure data is sorted before binary search (precondition)
+        Arrays.sort(bogieIds);
+
+        // Search key
+        String key = "BG309";
+
+        // Display available bogies
+        System.out.println("Sorted Bogie IDs:");
+        for (String id : bogieIds) {
+            System.out.println(id);
+        }
 
         System.out.println();
 
-        // Unsafe case
-        GoodsBogie rectangular = new GoodsBogie("Rectangular");
-        rectangular.assignCargo("Petroleum");
+        // ----- BINARY SEARCH LOGIC -----
+        int low = 0;
+        int high = bogieIds.length - 1;
+        boolean found = false;
 
-        System.out.println();
+        while (low <= high) {
+            int mid = (low + high) / 2;
 
-        System.out.println("UC15 runtime handling completed...");
+            int result = bogieIds[mid].compareTo(key);
+
+            if (result == 0) {
+                found = true;
+                break;
+            } else if (result < 0) {
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+
+        // Display result
+        if (found) {
+            System.out.println("Bogie " + key + " found using Binary Search.");
+        } else {
+            System.out.println("Bogie " + key + " not found.");
+        }
+
+        System.out.println("\nUC19 search completed...");
     }
 }
