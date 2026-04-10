@@ -1,45 +1,42 @@
 public class TrainConsistManagementApp {
 
-    // -------- CUSTOM EXCEPTION --------
-    static class InvalidCapacityException extends Exception {
-        public InvalidCapacityException(String message) {
-            super(message);
-        }
-    }
-
-    // Passenger Bogie model with validation
-    static class PassengerBogie {
-        String name;
-        int capacity;
-
-        PassengerBogie(String name, int capacity) throws InvalidCapacityException {
-            if (capacity <= 0) {
-                throw new InvalidCapacityException("Capacity must be greater than zero");
-            }
-            this.name = name;
-            this.capacity = capacity;
-        }
-    }
-
     public static void main(String[] args) {
 
-        System.out.println("===========================================");
-        System.out.println(" UC14 - Handle Invalid Bogie Capacity ");
-        System.out.println("===========================================\n");
+        System.out.println("=================================");
+        System.out.println("UC16 - Manual Sorting using Bubble Sort");
+        System.out.println("=================================\n");
 
-        try {
-            // Valid bogie
-            PassengerBogie b1 = new PassengerBogie("Sleeper", 72);
-            System.out.println("Created Bogie: " + b1.name + " -> " + b1.capacity);
+        // Create array of passenger bogie capacities
+        int[] capacities = {72, 56, 24, 70, 60};
 
-            // Invalid bogie
-            PassengerBogie b2 = new PassengerBogie("AC Chair", 0);
-
-        } catch (InvalidCapacityException e) {
-            System.out.println("Error: " + e.getMessage());
+        // Display original order
+        System.out.println("Original Capacities:");
+        for (int c : capacities) {
+            System.out.print(c + " ");
         }
 
-        System.out.println("\nUC14 exception handling completed...");
+        // BUBBLE SORT LOGIC
+        // Outer loop controls number of passes
+        for (int i = 0; i < capacities.length - 1; i++) {
+
+            // Inner loop compares adjacent elements
+            for (int j = 0; j < capacities.length - i - 1; j++) {
+
+                // Swap if left element is greater than right
+                if (capacities[j] > capacities[j + 1]) {
+                    int temp = capacities[j];
+                    capacities[j] = capacities[j + 1];
+                    capacities[j + 1] = temp;
+                }
+            }
+        }
+
+        // Display sorted result
+        System.out.println("\n\nSorted Capacities (Ascending):");
+        for (int c : capacities) {
+            System.out.print(c + " ");
+        }
+
+        System.out.println("\n\nUC16 sorting completed...");
     }
 }
-//TrainConsistManagementApp
