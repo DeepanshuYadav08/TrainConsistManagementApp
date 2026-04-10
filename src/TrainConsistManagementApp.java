@@ -1,51 +1,62 @@
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class TrainConsistManagementApp {
 
-    // Bogie model
-    public static class Bogie {
-        String name;
-        int capacity;
+    // Goods Bogie model
+    static class GoodsBogie {
+        String type;
+        String cargo;
 
-        public Bogie(String name, int capacity) {
-            this.name = name;
-            this.capacity = capacity;
-        }
-
-        @Override
-        public String toString() {
-            return name + " | Capacity: " + capacity;
+        GoodsBogie(String type, String cargo) {
+            this.type = type;
+            this.cargo = cargo;
         }
     }
 
-    // Filter method using Stream API
-    public static List<Bogie> filterBogiesByCapacity(List<Bogie> bogies, int threshold) {
-        return bogies.stream()
-                .filter(b -> b.capacity > threshold)
-                .collect(Collectors.toList());
+    // Method for safety check (IMPORTANT for tests)
+    public static boolean isTrainSafe(List<GoodsBogie> goodsBogies) {
+        return goodsBogies.stream()
+                .allMatch(b -> {
+                    // Rule: Cylindrical → only Petroleum allowed
+                    if (b.type.equals("Cylindrical")) {
+                        return b.cargo.equals("Petroleum");
+                    }
+                    // Other types are safe
+                    return true;
+                });
     }
 
     public static void main(String[] args) {
 
-        System.out.println("===============================================");
-        System.out.println("UC8 - Filter Passenger Bogies Using Streams");
-        System.out.println("===============================================\n");
+        System.out.println("===========================================");
+        System.out.println(" UC12 - Safety Compliance Check for Goods Bogies ");
+        System.out.println("===========================================\n");
 
-        // Create bogie list
-        List<Bogie> bogies = new ArrayList<>();
-        bogies.add(new Bogie("Sleeper", 72));
-        bogies.add(new Bogie("AC Chair", 60));
-        bogies.add(new Bogie("First Class", 40));
-        bogies.add(new Bogie("General", 90));
+        // Create list
+        List<GoodsBogie> goodsBogies = new ArrayList<>();
+        goodsBogies.add(new GoodsBogie("Cylindrical", "Petroleum"));
+        goodsBogies.add(new GoodsBogie("Open", "Coal"));
+        goodsBogies.add(new GoodsBogie("Box", "Grain"));
+        goodsBogies.add(new GoodsBogie("Cylindrical", "Coal")); // unsafe
 
-        int threshold = 60;
+        // Display
+        System.out.println("Goods Bogies in Train:");
+        for (GoodsBogie b : goodsBogies) {
+            System.out.println(b.type + " -> " + b.cargo);
+        }
 
-        // Apply filtering
-        List<Bogie> filteredBogies = filterBogiesByCapacity(bogies, threshold);
+        // Safety check
+        boolean isSafe = isTrainSafe(goodsBogies);
 
-        // Display result
-        System.out.println("Filtered Bogies (Capacity > " + threshold + "):");
-        filteredBogies.forEach(System.out::println);
+        System.out.println("\nSafety Compliance Status: " + isSafe);
+
+        if (isSafe) {
+            System.out.println("Train formation is SAFE.");
+        } else {
+            System.out.println("Train formation is NOT SAFE.");
+        }
+
+        System.out.println("\nUC12 safety validation completed...");
     }
 }
+//TrainConsistManagementApp
