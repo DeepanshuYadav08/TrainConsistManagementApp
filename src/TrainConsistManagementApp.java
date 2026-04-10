@@ -24,7 +24,7 @@ public class TrainConsistManagementApp {
     public static void main(String[] args) {
 
         System.out.println("===========================================");
-        System.out.println(" UC14 - Handle Invalid Bogie Capacity ");
+        System.out.println(" UC15 - Handle Invalid Bogie Capacity ");
         System.out.println("===========================================\n");
 
         try {
