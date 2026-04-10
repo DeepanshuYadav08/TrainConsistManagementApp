@@ -1,51 +1,60 @@
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
 public class TrainConsistManagementApp {
 
     // Bogie model
-    public static class Bogie {
+    static class Bogie {
         String name;
         int capacity;
 
-        public Bogie(String name, int capacity) {
+        Bogie(String name, int capacity) {
             this.name = name;
             this.capacity = capacity;
         }
-
-        @Override
-        public String toString() {
-            return name + " | Capacity: " + capacity;
-        }
     }
 
-    // Filter method using Stream API
-    public static List<Bogie> filterBogiesByCapacity(List<Bogie> bogies, int threshold) {
+    // Method for grouping (IMPORTANT for tests)
+    public static Map<String, List<Bogie>> groupBogies(List<Bogie> bogies) {
         return bogies.stream()
-                .filter(b -> b.capacity > threshold)
-                .collect(Collectors.toList());
+                .collect(Collectors.groupingBy(b -> b.name));
     }
 
     public static void main(String[] args) {
 
-        System.out.println("===============================================");
-        System.out.println("UC8 - Filter Passenger Bogies Using Streams");
-        System.out.println("===============================================\n");
+        System.out.println("===========================================");
+        System.out.println(" UC9 - Group Bogies by Type ");
+        System.out.println("===========================================\n");
 
-        // Create bogie list
+        // Create list
         List<Bogie> bogies = new ArrayList<>();
         bogies.add(new Bogie("Sleeper", 72));
+        bogies.add(new Bogie("AC Chair", 56));
+        bogies.add(new Bogie("First Class", 24));
+        bogies.add(new Bogie("Sleeper", 70));
         bogies.add(new Bogie("AC Chair", 60));
-        bogies.add(new Bogie("First Class", 40));
-        bogies.add(new Bogie("General", 90));
 
-        int threshold = 60;
+        // Display all
+        System.out.println("All Bogies:");
+        for (Bogie b : bogies) {
+            System.out.println(b.name + " -> " + b.capacity);
+        }
 
-        // Apply filtering
-        List<Bogie> filteredBogies = filterBogiesByCapacity(bogies, threshold);
+        // Grouping
+        Map<String, List<Bogie>> grouped = groupBogies(bogies);
 
-        // Display result
-        System.out.println("Filtered Bogies (Capacity > " + threshold + "):");
-        filteredBogies.forEach(System.out::println);
+        // Display grouped result
+        System.out.println("\nGrouped Bogies:");
+
+        for (Map.Entry<String, List<Bogie>> entry : grouped.entrySet()) {
+            System.out.println("\nBogie Type: " + entry.getKey());
+
+            for (Bogie b : entry.getValue()) {
+                System.out.println("  Capacity -> " + b.capacity);
+            }
+        }
+
+        System.out.println("\nUC9 grouping completed...");
     }
 }
+//TrainConsistManagementApp
